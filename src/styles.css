@@ -801,7 +801,7 @@ body.pointer-locked #chat-input-bar {
   #tasks-panel select, #tasks-panel input { font-size: 0.7rem; padding: 5px 6px; }
   #tasks-panel button { min-height: 44px; }
 
-  #settings-panel { left: 8px; right: 8px; min-width: auto; max-width: none; }
+  #settings-panel { left: 8px; right: 8px; min-width: auto; max-width: none; transform: translate(0, -50%); }
   #settings-panel select, #settings-panel input { font-size: 0.85rem; padding: 10px; min-height: 44px; }
   #settings-panel button { min-height: 44px; }
 

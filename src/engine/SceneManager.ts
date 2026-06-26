@@ -50,7 +50,7 @@ export class SceneManager {
     this.saoPass.params = {
       output: 0,
       saoBias: 0.2,
-      saoIntensity: isMobile ? 0.12 : 0.25,
+      saoIntensity: isMobile ? 0.08 : 0.12,
       saoScale: 1.2,
       saoKernelRadius: isMobile ? 60 : 120,
       saoMinResolution: 0,
@@ -64,9 +64,9 @@ export class SceneManager {
     // Bloom — makes lights/emissive surfaces glow
     this.bloomPass = new UnrealBloomPass(
       new Vector2(container.clientWidth, container.clientHeight),
-      isMobile ? 0.15 : 0.3,  // strength
-      isMobile ? 0.3 : 0.5,   // radius
-      isMobile ? 0.8 : 0.6,   // threshold
+      isMobile ? 0.08 : 0.12,  // strength
+      isMobile ? 0.2 : 0.3,   // radius
+      isMobile ? 0.9 : 0.85,  // threshold
     );
     this.composer.addPass(this.bloomPass);
 
