@@ -290,24 +290,34 @@ export class House extends Group {
   }
 
   private getDoorPositions(room: RoomDef): { x: number; z: number }[] {
-    // Simple heuristic: place door frames on shared walls between adjacent rooms
+    // Place door frames on shared walls between adjacent rooms
+    // Handles rooms that slightly overlap on the shared boundary
     const positions: { x: number; z: number }[] = [];
     const { x, z, w, d } = room;
+    const hw = w / 2, hd = d / 2;
+    const rMinX = x - hw, rMaxX = x + hw;
+    const rMinZ = z - hd, rMaxZ = z + hd;
     for (const other of ROOMS) {
       if (other === room) continue;
-      // Check adjacency and place door at midpoint of shared edge
-      const xOverlap = Math.max(0, Math.min(x + w / 2, other.x + other.w / 2) - Math.max(x - w / 2, other.x - other.w / 2));
-      const zOverlap = Math.max(0, Math.min(z + d / 2, other.z + other.d / 2) - Math.max(z - d / 2, other.z - other.d / 2));
-      if (xOverlap > 0.5 && zOverlap < 0.1) {
-        // Shared on Z axis
+      const ohw = other.w / 2, ohd = other.d / 2;
+      const oMinX = other.x - ohw, oMaxX = other.x + ohw;
+      const oMinZ = other.z - ohd, oMaxZ = other.z + ohd;
+      const xOverlap = Math.max(0, Math.min(rMaxX, oMaxX) - Math.max(rMinX, oMinX));
+      const zOverlap = Math.max(0, Math.min(rMaxZ, oMaxZ) - Math.max(rMinZ, oMinZ));
+      const xGap = Math.max(rMinX - oMaxX, oMinX - rMaxX);
+      const zGap = Math.max(rMinZ - oMaxZ, oMinZ - rMaxZ);
+      // Adjacent on Z axis: overlap on X, gap is small/negative on Z
+      if (xOverlap > 0.5 && zGap < 0.5 && zGap > -1.0) {
         const dir = z < other.z ? 1 : -1;
-        positions.push({ x, z: z + dir * (d / 2) });
-      } else if (zOverlap > 0.5 && xOverlap < 0.1) {
+        positions.push({ x, z: z + dir * hd });
+      }
+      // Adjacent on X axis: overlap on Z, gap is small/negative on X
+      if (zOverlap > 0.5 && xGap < 0.5 && xGap > -1.0) {
         const dir = x < other.x ? 1 : -1;
-        positions.push({ x: x + dir * (w / 2), z });
+        positions.push({ x: x + dir * hw, z });
       }
     }
-    return positions.slice(0, 2); // max 2 doors per room
+    return positions.slice(0, 2);
   }
 
   private buildBaseboards() {
@@ -796,16 +806,21 @@ export class House extends Group {
     for (const cn of cameraRooms) {
       const cr = ROOMS.find(r => r.name === cn);
       if (!cr) continue;
+      // Two cameras per room, one at each end — lens points toward room center
       for (const corner of [-1, 1]) {
+        const cx = cr.x + corner * (cr.w / 2 - 0.3);
+        const cz = cr.z;
         const dome = new Mesh(new SphereGeometry(0.04, 6, 6), camMat);
         dome.scale.y = 0.4;
-        dome.position.set(cr.x + corner * (cr.w / 2 - 0.3), WALL_H - 0.1, cr.z);
+        dome.position.set(cx, WALL_H - 0.1, cz);
         this.add(dome);
+        // Lens points toward room center
         const lens = new Mesh(new SphereGeometry(0.015, 6, 6), camLensMat);
-        lens.position.set(cr.x + corner * (cr.w / 2 - 0.3), WALL_H - 0.08, cr.z + 0.02);
+        const lookDir = corner > 0 ? -0.02 : 0.02;
+        lens.position.set(cx + lookDir, WALL_H - 0.08, cz);
         this.add(lens);
         const led = new Mesh(new SphereGeometry(0.005, 4, 4), camLedMat);
-        led.position.set(cr.x + corner * (cr.w / 2 - 0.3), WALL_H - 0.1, cr.z + 0.035);
+        led.position.set(cx, WALL_H - 0.1, cz + 0.035);
         this.add(led);
       }
     }

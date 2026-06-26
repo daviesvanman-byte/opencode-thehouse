@@ -33,30 +33,30 @@ export class SurveillanceSystem {
   private focusFeedIndex = 0;
 
   private camConfigs: CameraConfig[] = [
-    // Living Room (center: 0,0  w:7  d:5.5) — two corner angles
-    { name: 'Cam 1 — Living Room', room: 'Living Room', pos: [-2.8, 2.8, 2.0], target: [0, 0.8, 0] },
-    { name: 'Cam 2 — Living Room', room: 'Living Room', pos: [2.8, 2.8, -1.8], target: [0, 0.8, 0] },
+    // Living Room (center: 0,0  w:7  d:5.5) — ceiling center, wide view
+    { name: 'Cam 1 — Living Room', room: 'Living Room', pos: [0, 3.0, 0], target: [0, 0.5, -1.5] },
+    { name: 'Cam 2 — Living Room', room: 'Living Room', pos: [2.0, 3.0, -1.5], target: [-1, 0.5, 1] },
     // Kitchen (center: 0,4  w:5  d:3)
-    { name: 'Cam 3 — Kitchen', room: 'Kitchen', pos: [2.0, 2.8, 5.2], target: [0, 0.8, 4] },
-    { name: 'Cam 4 — Kitchen', room: 'Kitchen', pos: [-2.0, 2.8, 3.2], target: [0, 0.8, 4] },
+    { name: 'Cam 3 — Kitchen', room: 'Kitchen', pos: [0, 3.0, 4], target: [0, 0.5, 3] },
+    { name: 'Cam 4 — Kitchen', room: 'Kitchen', pos: [-1.5, 3.0, 5], target: [1, 0.5, 4] },
     // Dining Room (center: -3,4  w:3  d:3)
-    { name: 'Cam 5 — Dining Room', room: 'Dining Room', pos: [-4.2, 2.8, 5.2], target: [-3, 0.8, 4] },
+    { name: 'Cam 5 — Dining Room', room: 'Dining Room', pos: [-3, 3.0, 4], target: [-3, 0.5, 3] },
     // Bedroom 1 (center: 4,-2  w:3.5  d:3.5)
-    { name: 'Cam 6 — Bedroom 1', room: 'Bedroom 1', pos: [5.5, 2.8, -3.5], target: [4, 0.8, -2] },
-    { name: 'Cam 7 — Bedroom 1', room: 'Bedroom 1', pos: [3.0, 2.8, -0.5], target: [4, 0.8, -2] },
+    { name: 'Cam 6 — Bedroom 1', room: 'Bedroom 1', pos: [4, 3.0, -2], target: [4, 0.5, -3] },
+    { name: 'Cam 7 — Bedroom 1', room: 'Bedroom 1', pos: [5, 3.0, -3], target: [3, 0.5, -1] },
     // Bedroom 2 (center: -4,-2  w:3.5  d:3.5)
-    { name: 'Cam 8 — Bedroom 2', room: 'Bedroom 2', pos: [-5.5, 2.8, -0.5], target: [-4, 0.8, -2] },
+    { name: 'Cam 8 — Bedroom 2', room: 'Bedroom 2', pos: [-4, 3.0, -2], target: [-4, 0.5, -3] },
     // Bedroom 3 (center: 4,2  w:3  d:3)
-    { name: 'Cam 9 — Bedroom 3', room: 'Bedroom 3', pos: [5.2, 2.8, 0.8], target: [4, 0.8, 2] },
+    { name: 'Cam 9 — Bedroom 3', room: 'Bedroom 3', pos: [4, 3.0, 2], target: [4, 0.5, 1] },
     // Bathroom (center: -4,2  w:2.5  d:2.5)
-    { name: 'Cam 10 — Bathroom', room: 'Bathroom', pos: [-5.0, 2.8, 3.0], target: [-4, 0.8, 2] },
+    { name: 'Cam 10 — Bathroom', room: 'Bathroom', pos: [-4, 3.0, 2], target: [-4, 0.5, 1] },
     // Garden (center: 0,-5.5  w:8  d:3)
-    { name: 'Cam 11 — Garden', room: 'Garden', pos: [0, 4.0, -4.2], target: [0, 0.5, -6] },
-    { name: 'Cam 12 — Garden', room: 'Garden', pos: [-3, 3.0, -6.5], target: [0, 0.5, -5.5] },
+    { name: 'Cam 11 — Garden', room: 'Garden', pos: [0, 4.0, -5.5], target: [0, 0.5, -6] },
+    { name: 'Cam 12 — Garden', room: 'Garden', pos: [-2, 3.5, -6], target: [2, 0.5, -5] },
     // Diary Room (center: 0,-3.5  w:2.5  d:2)
-    { name: 'Cam 13 — Diary Room', room: 'Diary Room', pos: [0.8, 2.5, -2.8], target: [0, 1.0, -3.5] },
+    { name: 'Cam 13 — Diary Room', room: 'Diary Room', pos: [0, 3.0, -3.5], target: [0, 0.5, -4] },
     // Store Room (center: -3.5,-3  w:2  d:2)
-    { name: 'Cam 14 — Store Room', room: 'Store Room', pos: [-4.2, 2.5, -2.5], target: [-3.5, 0.8, -3] },
+    { name: 'Cam 14 — Store Room', room: 'Store Room', pos: [-3.5, 3.0, -3], target: [-3.5, 0.5, -3.8] },
   ];
 
   constructor() {
