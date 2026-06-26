@@ -69,11 +69,10 @@ yarn-error.log
 # Vite build output
 dist/
 
-# Downloaded 3D assets (too large for git)
-public/models/*.glb
-public/models/*.gltf
-public/models/*.vrm
-public/models/*.fbx
+# Cloned copy
+opencode-thehouse/
+
+# Downloaded 3D assets
 public/models/avatars/*.glb
 public/models/avatars/*.gltf
 public/models/avatars/*.vrm

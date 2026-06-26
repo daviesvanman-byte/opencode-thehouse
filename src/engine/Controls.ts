@@ -21,7 +21,7 @@ export class Controls {
   ) {
     camera.position.set(0, PLAYER_HEIGHT, -6); // spawn in Garden
     if (physics) {
-      const body = physics.addSphere([0, 0.8, 0], PLAYER_RADIUS, 1);
+      const body = physics.addSphere([0, 0.8, -6], PLAYER_RADIUS, 1);
       body.fixedRotation = true;
       body.updateMassProperties();
       physics.register(this.playerId, body);

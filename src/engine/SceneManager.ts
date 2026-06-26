@@ -64,9 +64,9 @@ export class SceneManager {
     // Bloom — makes lights/emissive surfaces glow
     this.bloomPass = new UnrealBloomPass(
       new Vector2(container.clientWidth, container.clientHeight),
-      isMobile ? 0.08 : 0.12,  // strength
-      isMobile ? 0.2 : 0.3,   // radius
-      isMobile ? 0.9 : 0.85,  // threshold
+      isMobile ? 0.04 : 0.06,  // strength
+      isMobile ? 0.15 : 0.2,   // radius
+      isMobile ? 0.95 : 0.92,  // threshold
     );
     this.composer.addPass(this.bloomPass);
 
