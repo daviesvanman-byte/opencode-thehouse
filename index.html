@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The House — Big Brother Simulation</title>
+    <link rel="stylesheet" href="/src/styles.css" />
+  </head>
+  <body>
+    <div id="blocker">
+      <div id="instructions">
+        <h1>The House</h1>
+        <p class="desktop-only">Click to enter the simulation</p>
+        <p class="mobile-only">Tap to enter the simulation</p>
+        <p class="small desktop-only">W/S — Forward/Backward &nbsp;|&nbsp; A/D — Strafe &nbsp;|&nbsp; Mouse — Look &nbsp;|&nbsp; Shift — Sprint &nbsp;|&nbsp; E — Talk to NPC</p>
+        <p class="small desktop-only">Tab — CCTV &nbsp;|&nbsp; M — Noclip &nbsp;|&nbsp; Esc — Exit/close chat &nbsp;|&nbsp; L — Event log</p>
+        <p class="small desktop-only">Type message → Enter to send &nbsp;|&nbsp; 🎤 mic button for voice input</p>
+        <p class="small mobile-only">👈 Left half — Joystick move &nbsp;|&nbsp; 👉 Right half — Look around</p>
+        <p class="small mobile-only">👆 Tap NPC to talk &nbsp;|&nbsp; 📋 Task button for tasks &nbsp;|&nbsp; 📺 CCTV button</p>
+      </div>
+    </div>
+
+    <div id="hud">
+      <div id="clock"></div>
+      <div id="day-counter"></div>
+    </div>
+
+    <div id="controls-panel">
+      <button id="pause-btn" title="Pause/Resume">⏸</button>
+      <button id="speed-down-btn" title="Slower">−</button>
+      <span id="speed-display">1×</span>
+      <button id="speed-up-btn" title="Faster">+</button>
+      <button id="cctv-btn" title="CCTV cameras">📺 Cameras</button>
+      <button id="tv-btn" title="TV Mode (auto-cycling cameras)">📺 TV</button>
+      <button id="noclip-btn" title="Toggle noclip">🔒 Noclip</button>
+      <button id="audio-toggle-btn" title="Toggle audio">🔊 Audio</button>
+      <button id="tasks-btn" title="Big Brother Tasks">📋 Tasks</button>
+      <button id="settings-btn" title="Settings">⚙️</button>
+    </div>
+
+    <div id="tasks-panel" class="hidden">
+      <h3>📋 Big Brother Tasks</h3>
+      <select id="task-npc-select"><option value="">Select NPC...</option></select>
+      <input id="task-desc" type="text" placeholder="Task description (e.g. Streak in garden)" />
+      <input id="task-bonus" type="text" placeholder="Bonus reward (e.g. Luxury hamper)" />
+      <select id="task-activity">
+        <option value="lounging">Lounging / Be somewhere</option>
+        <option value="socializing">Socialize</option>
+        <option value="eating">Eat in front of others</option>
+        <option value="changing">Get naked / Change clothes</option>
+        <option value="showering">Shower publicly</option>
+        <option value="diary">Confess in diary room</option>
+      </select>
+      <input id="task-deadline" type="number" min="1" max="28" value="7" placeholder="Deadline day" />
+      <button id="task-assign-btn">Assign Task</button>
+      <div id="task-list"></div>
+    </div>
+
+    <div id="privacy-overlay"></div>
+
+    <div id="crosshair" class="hidden">+</div>
+
+    <div id="interaction-prompt" class="hidden"></div>
+
+    <div id="npc-tags-container"></div>
+
+    <button id="minimap-btn">🗺 Map</button>
+    <div id="minimap">
+      <canvas id="minimap-canvas" width="320" height="240"></canvas>
+    </div>
+
+    <div id="cam-label"></div>
+    <div id="tv-watermark" class="hidden">Big Brother</div>
+
+    <div id="day-recap" class="hidden">
+      <div id="day-recap-header"></div>
+      <div id="day-recap-body"></div>
+      <button id="day-recap-close">Continue</button>
+    </div>
+
+    <div id="mobile-tutorial" class="hidden">
+      <div id="mobile-tutorial-content">
+        <h3>📱 Touch Controls</h3>
+        <p>👈 Left half — Move (joystick)</p>
+        <p>👉 Right half — Look around (drag)</p>
+        <p>👆 Tap an NPC — Talk to them</p>
+        <p>📺 Tap 📺 Cameras — CCTV mode</p>
+        <button id="mobile-tutorial-dismiss">Got it!</button>
+      </div>
+    </div>
+
+    <div id="settings-panel" class="hidden">
+      <h3>⚙️ Settings</h3>
+      <label>LLM API Key (NPC Brain)</label>
+      <select id="settings-provider">
+        <option value="openrouter">OpenRouter</option>
+        <option value="gemini">Gemini</option>
+        <option value="groq">Groq</option>
+        <option value="huggingface">HuggingFace</option>
+      </select>
+      <input id="settings-api-key" type="password" placeholder="Enter API key..." />
+      <button id="settings-save">Save</button>
+      <span id="settings-status"></span>
+      <button id="settings-close">Close</button>
+    </div>
+
+    <div id="task-replay" class="hidden">
+      <div id="task-replay-header"></div>
+      <div id="task-replay-body">
+        <div id="task-replay-minimap-container">
+          <canvas id="task-replay-canvas" width="320" height="200"></canvas>
+        </div>
+        <div id="task-replay-timeline"></div>
+        <div id="task-replay-status"></div>
+      </div>
+      <div style="display:flex;gap:8px;justify-content:center;margin-top:8px">
+        <button id="task-replay-close">Close</button>
+        <button id="task-replay-save-video">💾 Save Video</button>
+        <button id="task-replay-download">⬇ Download</button>
+      </div>
+    </div>
+
+    <div id="npc-info"></div>
+
+    <div id="right-panel">
+      <h3>NPC Needs</h3>
+      <div id="needs-container">
+        <div class="need-hint">Click an NPC to see their needs</div>
+      </div>
+    </div>
+
+    <button id="event-log-toggle" title="Toggle event log">📋 Log</button>
+    
+    <button id="talk-btn" class="hidden" title="Talk to NPC">💬 Talk</button>
+
+    <div id="event-log-container" class="hidden">
+      <h3 id="event-log-header">
+        📋 Event Log <span style="opacity:0.4;font-size:0.6rem">▼</span>
+      </h3>
+      <div id="event-log"></div>
+    </div>
+
+    <div id="dialogue-box" class="hidden">
+      <div id="dialogue-speaker"></div>
+      <div id="dialogue-text"></div>
+    </div>
+
+    <div id="chat-input-bar" class="hidden">
+      <input id="chat-input" type="text" placeholder="Type your message..." maxlength="200" autocomplete="off" />
+      <button id="chat-send">Send</button>
+      <button id="chat-mic" title="Use microphone">🎤</button>
+    </div>
+
+    <div id="landscape-warning" class="hidden">
+      <div id="landscape-warning-content">
+        <p>🔄</p>
+        <p>Please rotate your device to portrait mode</p>
+      </div>
+    </div>
+
+    <div id="loading-screen">
+      <div class="loader"></div>
+      <p>Loading The House...</p>
+    </div>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
