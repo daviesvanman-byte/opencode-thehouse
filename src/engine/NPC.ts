@@ -3,7 +3,7 @@ import {
 } from 'three';
 import { AnimationController } from './AnimationController';
 import { SkeletalAnimator } from './SkeletalAnimator';
-import { type PhysicsWorld } from './Physics';
+import { type PhysicsWorld, COL_NPC, COL_WALL, COL_FURNITURE } from './Physics';
 import { Needs, type PersonalityTraits, EmotionalState } from '../simulation/Needs';
 import { ClothingStateMachine } from './ClothingState';
 import { Memory } from '../simulation/Memory';
@@ -238,7 +238,7 @@ export class NPC extends Group {
   }
 
   initPhysics(physics: PhysicsWorld) {
-    const body = physics.addSphere([this.position.x, 0.8, this.position.z], 0.3, 1);
+    const body = physics.addSphere([this.position.x, 0.8, this.position.z], 0.3, 1, COL_NPC, COL_WALL | COL_FURNITURE);
     body.fixedRotation = true;
     body.updateMassProperties();
     physics.register(this.physicsBodyId, body);
@@ -653,20 +653,17 @@ export class NPC extends Group {
       let vx = (dx / dist) * speed;
       let vz = (dz / dist) * speed;
 
-      // Stuck recovery logic
+      // Stuck recovery logic — gentle wall sliding
       const vel = physics.getVelocity(this.physicsBodyId);
       if (vel) {
         const currentSpeed = Math.sqrt(vel[0] * vel[0] + vel[2] * vel[2]);
         if (currentSpeed < 0.1) {
           this.stuckTimer += dt;
-          if (this.stuckTimer > 0.5) {
-            // We are stuck! Apply a perpendicular "slide" force to find a gap
+          if (this.stuckTimer > 0.3) {
+            // Gentle perpendicular slide to find a gap (30% of move speed)
             const slideDir = Math.sin(Date.now() * 0.005) > 0 ? 1 : -1;
-            vx += (dz / dist) * speed * slideDir;
-            vz -= (dx / dist) * speed * slideDir;
-            // Slowly nudge the target position to avoid repeat sticking
-            this.targetPos.x += (Math.random() - 0.5) * 0.1;
-            this.targetPos.z += (Math.random() - 0.5) * 0.1;
+            vx += (dz / dist) * speed * 0.3 * slideDir;
+            vz -= (dx / dist) * speed * 0.3 * slideDir;
           }
         } else {
           this.stuckTimer = 0;

@@ -121,8 +121,9 @@ export class NPCManager {
         // Center the avatar feet at y=0
         const bbox2 = new Box3().setFromObject(group);
         group.position.y = -bbox2.min.y;
-        // Apply procedural PBR skin textures
-        this.applyProceduralSkin(group, i);
+        // Keep the GLB's original textures — only apply procedural skin
+        // if the model has a _Body material (for low-poly base meshes)
+        // this.applyProceduralSkin(group, i);
         npc.replaceWithAvatar(group);
       } catch (e) {
         console.warn(`Failed to load GLB avatar for ${npc.npcName}, using procedural fallback:`, e);

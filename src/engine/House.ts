@@ -499,12 +499,12 @@ export class House extends Group {
       this.add(post);
     }
 
-    // Outer perimeter collision
+    // Outer perimeter collision — full height walls
     if (this.physics) {
-      this.physics.addBox([0, 0.5, -7], [9, 1, 0.5], true);
-      this.physics.addBox([0, 0.5, 5.8], [9, 1, 0.5], true);
-      this.physics.addBox([-5.2, 0.5, -1], [0.5, 1, 14], true);
-      this.physics.addBox([5.2, 0.5, -1], [0.5, 1, 14], true);
+      this.physics.addBox([0, 1.4, -7], [9, WALL_H, 0.5], true);
+      this.physics.addBox([0, 1.4, 5.8], [9, WALL_H, 0.5], true);
+      this.physics.addBox([-5.2, 1.4, -1], [0.5, WALL_H, 14], true);
+      this.physics.addBox([5.2, 1.4, -1], [0.5, WALL_H, 14], true);
     }
   }
 
@@ -742,13 +742,16 @@ export class House extends Group {
           const chairSeatMat = new MeshStandardMaterial({ color: 0xa08060, roughness: 0.7 });
           const chairAngles = [0, Math.PI * 0.5, Math.PI, Math.PI * 1.5];
           for (const a of chairAngles) {
+            const cx = room.x + Math.cos(a) * 0.55;
+            const cz = room.z + Math.sin(a) * 0.55;
             const seat = new Mesh(new BoxGeometry(0.2, 0.04, 0.2), chairSeatMat);
-            seat.position.set(room.x + Math.cos(a) * 0.55, 0.38, room.z + Math.sin(a) * 0.55);
+            seat.position.set(cx, 0.38, cz);
             this.add(seat);
             const back = new Mesh(new BoxGeometry(0.16, 0.15, 0.02), chairSeatMat);
             back.position.set(room.x + Math.cos(a) * 0.6, 0.5, room.z + Math.sin(a) * 0.6);
             back.rotation.y = a + Math.PI;
             this.add(back);
+            if (this.physics) this.physics.addBox([cx, 0.2, cz], [0.2, 0.3, 0.2], true);
           }
           break;
         }

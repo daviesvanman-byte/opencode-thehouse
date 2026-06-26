@@ -3,6 +3,11 @@ import {
   NaiveBroadphase, GSSolver,
 } from 'cannon-es';
 
+export const COL_WALL = 1;
+export const COL_NPC = 2;
+export const COL_PLAYER = 4;
+export const COL_FURNITURE = 8;
+
 export class PhysicsWorld {
   readonly world: World;
   private bodies = new Map<object, Body>();
@@ -12,25 +17,29 @@ export class PhysicsWorld {
     this.world.gravity.set(0, -9.82, 0);
     this.world.broadphase = new NaiveBroadphase();
     (this.world.solver as GSSolver).iterations = 10;
-    this.world.defaultContactMaterial.friction = 0.3;
+    this.world.defaultContactMaterial.friction = 0.5;
   }
 
-  addBox(pos: [number, number, number], size: [number, number, number], staticBody = true): Body {
+  addBox(pos: [number, number, number], size: [number, number, number], staticBody = true, group = COL_WALL, mask = COL_NPC | COL_PLAYER): Body {
     const opts: BodyOptions = {
       shape: new Box(new Vec3(size[0] / 2, size[1] / 2, size[2] / 2)),
       position: new Vec3(pos[0], pos[1], pos[2]),
       type: staticBody ? Body.STATIC : Body.DYNAMIC,
+      collisionFilterGroup: group,
+      collisionFilterMask: mask,
     };
     const body = new Body(opts);
     this.world.addBody(body);
     return body;
   }
 
-  addSphere(pos: [number, number, number], radius: number, mass = 1): Body {
+  addSphere(pos: [number, number, number], radius: number, mass = 1, group = COL_NPC, mask = COL_WALL | COL_FURNITURE): Body {
     const body = new Body({
       shape: new Sphere(radius),
       position: new Vec3(pos[0], pos[1], pos[2]),
       mass,
+      collisionFilterGroup: group,
+      collisionFilterMask: mask,
     });
     this.world.addBody(body);
     return body;

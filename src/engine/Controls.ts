@@ -1,5 +1,5 @@
 import { PerspectiveCamera, Vector3 } from 'three';
-import { type PhysicsWorld } from './Physics';
+import { type PhysicsWorld, COL_PLAYER, COL_WALL, COL_FURNITURE } from './Physics';
 import type { TouchState } from './MobileControls';
 
 export const PLAYER_HEIGHT = 1.7;
@@ -21,7 +21,7 @@ export class Controls {
   ) {
     camera.position.set(0, PLAYER_HEIGHT, -6); // spawn in Garden
     if (physics) {
-      const body = physics.addSphere([0, 0.8, -6], PLAYER_RADIUS, 1);
+      const body = physics.addSphere([0, 0.8, -6], PLAYER_RADIUS, 1, COL_PLAYER, COL_WALL | COL_FURNITURE);
       body.fixedRotation = true;
       body.updateMassProperties();
       physics.register(this.playerId, body);

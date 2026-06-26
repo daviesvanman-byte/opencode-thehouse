@@ -23,7 +23,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const MODELS_DIR = join(__dirname, '..', 'public', 'models');
 const AVATARS_DIR = join(MODELS_DIR, 'avatars');
 
-const HOUSEMATES = ['alex', 'jordan', 'sam'];
+const HOUSEMATES = ['alexander', 'jessica', 'samantha', 'ryan', 'isabella', 'olivia', 'ethan', 'liam', 'charlotte', 'noah'];
 const LAYERS = ['body', 'dressed', 'sleepwear', 'towel', 'swimwear'];
 
 // CC0 photorealistic rigged avatar sources per NPC
